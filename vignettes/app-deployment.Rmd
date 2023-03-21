@@ -1,0 +1,43 @@
+---
+title: "Deploying to a Server / the Cloud"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Deploying to a Server / the Cloud}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+As the interactive app has been built using [shiny](https://shiny.rstudio.com), there are several ways of deploying it. Two of the most common ways are explained in this document and additional information on deploying a shiny application can be found [here](https://shiny.rstudio.com/deploy/).
+
+# Using shiny-server ✨
+
+[Shiny-server](https://posit.co/products/open-source/shinyserver/) is an application to easily run shiny apps on a server.
+
+Once you have a running instance of shiny-server, you can easily setup the interactive occupationMeasurement shiny app by adding a new script called `app.R` with the following code:
+
+```{r eval=FALSE}
+library(occupationMeasurement)
+
+app()
+```
+
+You can of course carry over all the settings / your custom questionnaire passed to `app()` for a more complex configuration.
+
+# Using docker 🐳
+
+For easy deployment of the api, the package comes with a pre-built [docker](https://www.docker.com/) image called [`ghcr.io/occupationmeasurement/app:latest `](https://github.com/orgs/occupationMeasurement/packages/container/package/app).
+
+To test this image on your local machine you can run the following command in your command line (this assumses you have Docker installed):
+
+```bash
+docker run --rm -p 3838:3838 -v $(pwd)/output:/srv/shiny-server/output ghcr.io/occupationmeasurement/app:latest
+```
+
+For more detailed information on the docker images if you e.g. want to build your own refer to the [docker directory](https://github.com/occupationMeasurement/occupationMeasurement/tree/main/docker) in the repository.

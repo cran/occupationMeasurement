@@ -1,0 +1,75 @@
+---
+title: "Getting Started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This package implements a toolbox of functionality to help with many of the tasks surrounding the accurate coding of occupations.
+
+The main way of using this package is via the [interactive app](#interactive-app) that comes packaged with it. This is by far the easiest way of using the package and allows you to seamlessly collect occupational data and immediately code it.
+
+To integrate the package's functionality into custom survey software you can use the included [API](#json-api) and if you want to use the package programmatically in R, it exposes some [functions](#included-r-functions) to easily do this as well. Please refer to the sections below on how to use each of these functionalities.
+
+By default the toolbox uses the [German Auxiliary Classification of Occupations (AuxCO)](https://github.com/occupationMeasurement/auxiliary-classification) to present easier to understand categories to respondets. Final occupation codings are available for the [International Standard Classification of Occupations 2008 (ISCO-08)](https://www.ilo.org/public/english/bureau/stat/isco/isco08/) and the [German Klassifikation der Berufe 2010 (KldB-2010)](https://statistik.arbeitsagentur.de/DE/Navigation/Grundlagen/Klassifikationen/Klassifikation-der-Berufe/Archiv-KldB/KldB2010/KldB2010-Nav.html).
+
+> Note: Due to limitations in available training data the tool is currently only implemented in German. Support for other languages, especially English, is planned, but pending on additional data. 
+
+# Flow
+
+The diagram below illustrates how participants are routed through the interactive occupation coding app.
+
+This flow is exactly implemented in the interactive app and we recommend to base any new implementation in e.g. custom survey software to also implement this flow.
+
+![A diagram illustrating the participant flow within the interactive app](../man/figures/app_flow.svg){width="100%"}
+
+# Interactive App
+
+The classical way of using this package is by using the interactive application that comes packaged with it. This app comes with "batteries-included" to run right out-of-the box and allow you to collect data immediately.
+
+Detailed information on using the app, can be found in `vignette("app")` and the help page `?app`.
+
+```{r eval=FALSE}
+# Run the interactive shiny app
+occupationMeasurement::app()
+```
+
+## Different Questionnaires
+
+You're of course also not limited to using the app only with its default questionnaire. Indeed you can use any one of the ready-built questionnaires that come with the app, such as `questionnaire_web_survey()` (the default),`questionnaire_demo()` (to learn about the workings of the tool) or `questionnaire_interviewer_administered()` (for guided interviews with a professional interviewer).
+
+```{r eval=FALSE}
+library(occupationMeasurement)
+
+app(
+  # Learn more about the workings of the app with the demo questionnaire
+  questionnaire = questionnaire_demo()
+)
+```
+
+Moreover, you're also able to modify questionnaires or just build your own from scratch. You can read more about this functionality in `vignette("app-questionnaire")`.
+
+Before you dive deeper into this technical software documentation, however, we strongly recommend you try the app with the `questionnaire_demo()` first.
+
+# Alternative Usage
+
+## JSON-API
+
+If you're looking to integrate the package into your existing setup or tool the JSON-API that comes with the package might suit you better than the shiny app, due to it's increased flexibility. For more information on the api you can read `vignette("api")` and the help page `?api`.
+
+## Included R-Functions
+
+The package also exports some high-level functions to allow you to generate your own suggestions and work with them.
+
+The functions are closely related to the API, so reading the above section on using the API may be helpful for a higher-level understanding of their relationship to each other.
+
+The most interesting functions for external usage will be `get_job_suggestions()`, `get_followup_questions()` and `get_final_codes()`.

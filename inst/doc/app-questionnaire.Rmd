@@ -1,0 +1,169 @@
+---
+title: "Custom Questionnaires / Pages"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Custom Questionnaires / Pages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+When using the interactive shiny app you can use one of the different available questionnaires to e.g. conduct a web survey (`questionnaire_web_survey()`) or collect data from interviewer-administered (phone) interviews (`questionnaire_interviewer_administered()`).
+
+To be as flexible as possible, you can also modify these existing questionnaires or just build your own one from scratch.
+
+# Pages 📃
+
+All questionnaires are built on top of pages. New pages can be created using the function `new_page()`, the documentation of which is essential reading for those who want to design their own pages.
+
+There exist some helper functions that make it simple to create specific types of question pages:
+
+- `page_choose_one_option()`
+- `page_freetext()`
+
+In general each page has a unique `page_id` to identify itself and follows a general principle of lifecycle functions. Most of these lifecycle functions are optional, except for the `render` function, which should return the shiny [HTML tags](https://shiny.rstudio.com/articles/tag-glossary.html) or inputs / outputs to be displayed. All lifecycle functions take at least the shiny session as arguments, other arguments depend on the function itself (supported arguments are listed in `new_page()`).
+
+> Tip: When implementing your own pages, we recommend to use `...` as the last parameter in all of them to allow for potentially new parameters to be added.
+
+To find some useful pre-built pages or helper functions to easily generate commonly used pages check out all functions whose name starts with `page_` in the reference.
+
+## Page Lifecycle
+
+The lifecycle of a page is as follows: First, its `condition` will be run to check whether the page should be displayed at all. If this function returns `FALSE` the page will be skipped and the condition for the following one will be evaluated.
+
+If the condition is `TRUE`, the page will be shown. To do this the function `run_before` will be run to prepare everything for the page, followed by `render` to generate the page's actual outputs (ata returned from `run_before` is available in `render` under the name `run_before_output`).
+
+When the user navigates away from a page and to the next page, the function `run_after` will be called which can be used to capture user input and save data. Then, the next page's `condition` will be checked and so on.
+
+If the user wants to go back to the previous page, `run_after` will not be called and the previous page will be shown. The `condition` of the page that the user visited before will not be checked again.
+
+A more detailed description of the page lifecycle can be found in the documentation for `new_page()`.
+
+## Saving Data
+
+All existing pages (e.g. `page_first_freetext()`, `page_select_suggestion()`) and page helpers (e.g.` page_choose_one_option()`, `page_freetext()`) will automatically save user input (as long as it is not explicitly disabled in the `app_settings`).
+
+When building your own pages from scratch, however, you will have to make sure to specify which data should be saved in the app. This can be done by using `set_item_data()`. If data is saved using this function, it will automatically be saved with the other data, yet we always recommend verifying that questionnaire data is saved as expected before starting proper data collection.
+
+For a detailed description of what data is saved by default and in which format, examine the section "data" in `vignette("app")`.
+
+# Questionnaires 📑
+
+## Building your Own ✨
+
+Once you're comfortable building your own pages, building your own questionnaire is trivial, as a questionnaire is merely a list of pages.
+
+An example for a simple questionnaire would be:
+
+```{r eval=FALSE}
+library(occupationMeasurement)
+library(shiny)
+
+my_simple_questionnaire <- list(
+  new_page(
+    page_id = "test",
+    render = function(...) {
+      return(
+        p("Hello!"),
+        button_previous(),
+        button_next()
+      )
+    }
+  ),
+
+  # Create a custom page to choose your favorite meal
+  page_choose_one_option(
+    page_id = "favourite_meal",
+    question_text = "Please pick your favorite kind of meal.",
+    list_of_choices = list(
+      "Breakfast" = 1,
+      "Lunch" = 2,
+      "Dinner" = 3
+    )
+  )
+)
+
+# Test the questionnaire in the app
+# app(questionnaire = my_simple_questionnaire)
+```
+
+As the general goal of this package is the measurement of occupations, you will usually want to at least include the core set of pages:
+
+```{r eval=FALSE}
+list(
+  # ... some of your pages before ...
+  page_first_freetext(),
+  page_second_freetext(),
+  page_select_suggestion(),
+  page_none_selected_freetext(),
+  page_followup(1),
+  page_followup(2)
+  # ... some of your pages after ...
+)
+```
+
+## Modifying an Existing One
+
+Apart from creating a new questionnaire from scratch, it's also possible to take an existing questionnaire and modify it to suit your needs.
+
+To do this you can modify the questionnaire itself, by adding, removing or overwriting pages into it (as the questionnaire is just a list, it can be modified just like one).
+
+```{r}
+library(occupationMeasurement)
+library(shiny)
+
+questionnaire <- questionnaire_web_survey()
+
+# Remove the first page (welcome)
+questionnaire[[1]] <- NULL
+
+# Use c() to add a new alternative page at the start
+questionnaire <- c(
+  list(
+    new_page(
+      "my_welcome",
+      render = function() {
+        return(h1("Hello!"))
+      }
+    )
+  ),
+  questionnaire
+)
+
+# Test the questionnaire in the app
+# app(questionnaire = questionnaire)
+```
+
+Alternatively it's also possible to modify pages themselves (albeit a bit more complicated). Under the hood, pages are essentially also powered by lists and therefore their parameters can just be overwritten e.g. removing a page's condition check can be done by overwriting it via `page$condition <- NULL`.
+
+As a page's different parameters usually depend on each other it's much easier to accidentaly break something. Therefore it is in general a good practice to overwrite a page's function by just wrapping it, like the example below.
+
+```{r}
+library(occupationMeasurement)
+library(shiny)
+
+questionnaire <- questionnaire_web_survey()
+
+# Add some text to page_select_suggestion
+print(questionnaire[[4]]$page_id)
+
+original_select_suggestion_render <- questionnaire[[4]]$render
+questionnaire[[4]]$render <- function(...) {
+  return(c(
+    list(
+      p("~ My custom text before ~")
+    ),
+    original_select_suggestion_render(...)
+  ))
+}
+
+# Test the questionnaire in the app
+# app(questionnaire = questionnaire)
+```
+
