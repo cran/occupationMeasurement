@@ -24,13 +24,15 @@
 #' @export
 #' @seealso `vignette("api")`
 #' @examples
-#' # Get the plumber router
-#' router <- api(
-#'   start = FALSE,
-#'   # If this is TRUE, the log directory will immediately be created
-#'   log_to_file = FALSE
-#' )
+#' \dontshow{data.table::setDTthreads(1)}
+#'
 #' if (interactive()) {
+#'   # Get the plumber router
+#'   router <- api(
+#'     start = FALSE,
+#'     # If this is TRUE, the log directory will immediately be created
+#'     log_to_file = FALSE
+#'   )
 #'   # Start the router
 #'   plumber::pr_run(router)
 #' }

@@ -38,28 +38,35 @@ create_document_term_matrix <- function(input) {
 #' @return A data.table with suggestions or NULL if no suggestions were found.
 #' @export
 #' @examples
-#' # Use with default settings
-#' get_job_suggestions(
-#'   "Arzt",
-#'   steps = list(
-#'     simbased_default = list(
-#'       algorithm = algo_similarity_based_reasoning
-#'     )
-#'   )
-#' )
+#' \dontshow{data.table::setDTthreads(1)}
 #'
-#' # Use with substring similarity
-#' get_job_suggestions(
-#'   "Arzt",
-#'   steps = list(
-#'     simbased_substring = list(
-#'       algorithm = algo_similarity_based_reasoning,
-#'       parameters = list(
-#'         sim_name = "substring"
+#' \dontrun{
+#' # Use with default settings
+#' if (interactive()) {
+#'   get_job_suggestions(
+#'     "Arzt",
+#'     steps = list(
+#'       simbased_default = list(
+#'         algorithm = algo_similarity_based_reasoning
 #'       )
 #'     )
 #'   )
-#' )
+#' }
+#'
+#' # Use with substring similarity
+#' if (interactive()) {
+#'  get_job_suggestions(
+#'    "Arzt",
+#'    steps = list(
+#'      simbased_substring = list(
+#'        algorithm = algo_similarity_based_reasoning,
+#'        parameters = list(
+#'          sim_name = "substring"
+#'        )
+#'      )
+#'    )
+#'  )
+#' }
 #'
 #' # Comparison of algo_similarity_based_reasoning() with get_job_suggestions()
 #'
@@ -87,6 +94,7 @@ create_document_term_matrix <- function(input) {
 #'     )
 #'   )[, list(kldb_id, score, sim_name, kldb_id_title = title)]
 #' }
+#' }
 algo_similarity_based_reasoning <- function(text_processed,
                                             sim_name = "wordwise",
                                             probabilities = occupationMeasurement::pretrained_models$similarity_based_reasoning, ...) {
@@ -102,7 +110,8 @@ algo_similarity_based_reasoning <- function(text_processed,
       probabilities$wordwise$modelProb[, string],
       document_term_matrix@Dimnames[[2]],
       method = "osa",
-      weight = c(d = 1, i = 1, s = 1, t = 1)
+      weight = c(d = 1, i = 1, s = 1, t = 1),
+      nthread = data.table::getDTthreads()
     )
     # indices of words at most one character apart
     wordwise_str_distances_ind <- which(wordwise_str_distances <= 1, arr.ind = TRUE)
@@ -236,9 +245,17 @@ algo_similarity_based_reasoning <- function(text_processed,
 #' @return A data.table with suggestions or NULL if no suggestions were found.
 #' @export
 #' @examples
-#' get_job_suggestions("Koch")
+#' \dontshow{data.table::setDTthreads(1)}
 #'
-#' get_job_suggestions("Schlosser")
+#' \dontrun{
+#' if (interactive()) {
+#'   get_job_suggestions("Koch")
+#' }
+#'
+#' if (interactive()) {
+#'   get_job_suggestions("Schlosser")
+#' }
+#' }
 get_job_suggestions <- function(text,
                                 suggestion_type = "auxco-1.2.x", # or "kldb-2010"
                                 num_suggestions = 5,
@@ -445,7 +462,7 @@ add_distinctions_auxco <- function(previous_suggestions, num_suggestions, sugges
   auxco <- get_data("auxco-1.2.x", user_provided_data = suggestion_type_options$datasets)
 
   # Make sure highly improbable suggestions are shown at the end (we may even want to remove them)
-  previous_suggestions <- previous_suggestions[score < 0.005, order_indicator := 0L]
+  previous_suggestions[score < 0.005, order_indicator := 0L]
 
   # if a category has rather high probability to be correct (> 0.2, value is made-up!) add all abgrenzungen with similarity = high. Set their score to 0.05.
   # preliminary analysis with turtle data suggests that the exact value for the threshold (0.2) and the inserted probability (0.05) have basically no influence. Maybe a smaller threshold would be preferable? Set to 0.3 for testing (looks like a small threshold is most promising if we show many 7 answer options, larger thresholds around 0.7 seem better if we show at most four answer options)
@@ -524,8 +541,12 @@ add_distinctions_kldb <- function(previous_suggestions, num_suggestions, suggest
 #' @export
 #' @inheritParams get_job_suggestions
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' # Get followup questions for "Post- und Zustelldienste"
 #' get_followup_questions("1004")
+#' }
 get_followup_questions <- function(suggestion_id, tense = "present", suggestion_type = "auxco-1.2.x", suggestion_type_options = list(), include_answer_codes = FALSE) {
   # Column names used in data.table (for R CMD CHECK)
   entry_type <- question_id <- auxco_id <- NULL
@@ -609,7 +630,11 @@ get_followup_questions <- function(suggestion_id, tense = "present", suggestion_
 #' @export
 #' @inheritParams get_job_suggestions
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' get_suggestion_info("9079")
+#' }
 get_suggestion_info <- function(suggestion_ids,
                                 suggestion_type = "auxco-1.2.x",
                                 suggestion_type_options = list(),
@@ -687,6 +712,9 @@ get_suggestion_info <- function(suggestion_ids,
 #' @return A named list corresponding to the code_type(s) specified. Includes a `message` if `verbose = TRUE`
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' get_final_codes(
 #'   # Führungsaufgaben mit Personalverantwortung  bei der Lebensmittelherstellung
 #'   "9076",
@@ -720,6 +748,7 @@ get_suggestion_info <- function(suggestion_ids,
 #'     "isco_supervisor_manager" = "isco_not_supervising"
 #'   )
 #' )
+#' }
 get_final_codes <- function(
     suggestion_id,
     followup_answers = list(),

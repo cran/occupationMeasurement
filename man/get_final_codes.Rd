@@ -74,6 +74,9 @@ If \code{followup_answers} is missing or incomplete, one may wish to insert/infe
 by using \code{standardized_answer_levels}.
 }
 \examples{
+\dontshow{data.table::setDTthreads(1)}
+
+\dontrun{
 get_final_codes(
   # Führungsaufgaben mit Personalverantwortung  bei der Lebensmittelherstellung
   "9076",
@@ -107,4 +110,5 @@ get_final_codes(
     "isco_supervisor_manager" = "isco_not_supervising"
   )
 )
+}
 }

@@ -18,8 +18,9 @@ The basic default questionnaire. View the function's code to see the
 used pages. This function is meant as a template that can be changed to meet your requirements.
 }
 \examples{
-library(occupationMeasurement)
+\dontshow{data.table::setDTthreads(1)}
 
+\dontrun{
 # Inspect the code to create the questionnaire_web_survey
 print(questionnaire_web_survey)
 
@@ -31,5 +32,6 @@ if (interactive()) {
 if (interactive()) {
   # This is used by default within app
   app()
+}
 }
 }

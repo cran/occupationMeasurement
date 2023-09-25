@@ -340,10 +340,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<p>As the interactive app has been built using <a href="https://shiny.rstudio.com">shiny</a>, there are several ways of
+<p>As the interactive app has been built using <a href="https://shiny.posit.co">shiny</a>, there are several ways of
 deploying it. Two of the most common ways are explained in this document
 and additional information on deploying a shiny application can be found
-<a href="https://shiny.rstudio.com/deploy/">here</a>.</p>
+<a href="https://shiny.posit.co/r/deploy.html">here</a>.</p>
 <div id="using-shiny-server" class="section level1">
 <h1>Using shiny-server ✨</h1>
 <p><a href="https://posit.co/products/open-source/shinyserver/">Shiny-server</a>
@@ -351,9 +351,9 @@ is an application to easily run shiny apps on a server.</p>
 <p>Once you have a running instance of shiny-server, you can easily
 setup the interactive occupationMeasurement shiny app by adding a new
 script called <code>app.R</code> with the following code:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(occupationMeasurement)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">app</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(occupationMeasurement)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">app</span>()</span></code></pre></div>
 <p>You can of course carry over all the settings / your custom
 questionnaire passed to <code>app()</code> for a more complex
 configuration.</p>
@@ -364,7 +364,7 @@ configuration.</p>
 <p>To test this image on your local machine you can run the following
 command in your command line (this assumses you have Docker
 installed):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-p</span> 3838:3838 <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>/output:/srv/shiny-server/output ghcr.io/occupationmeasurement/app:latest</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-p</span> 3838:3838 <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>/output:/srv/shiny-server/output ghcr.io/occupationmeasurement/app:latest</span></code></pre></div>
 <p>For more detailed information on the docker images if you e.g. want
 to build your own refer to the <a href="https://github.com/occupationMeasurement/occupationMeasurement/tree/main/docker">docker
 directory</a> in the repository.</p>

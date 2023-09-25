@@ -45,6 +45,9 @@ validate_questionnaire <- function(questionnaire, verbose) {
 #' @seealso `vignette("app")`, [questionnaire_web_survey()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' app_instance <- app(
 #'   app_settings = create_app_settings(
 #'     # Important to save results from the app
@@ -55,6 +58,7 @@ validate_questionnaire <- function(questionnaire, verbose) {
 #' # Start the app
 #' if (interactive()) {
 #'   app_instance
+#' }
 #' }
 app <- function(questionnaire = questionnaire_web_survey(),
                 app_settings = create_app_settings(save_to_file = TRUE),

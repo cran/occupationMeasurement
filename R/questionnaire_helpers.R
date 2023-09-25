@@ -8,6 +8,9 @@
 #' @export
 #' @seealso [new_page()]
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' very_simple_page <- new_page(
 #'   page_id = "example",
 #'   render = function(session, run_before_output, input, output, ...) {
@@ -18,6 +21,7 @@
 #'     )
 #'   }
 #' )
+#' }
 button_next <- function(label = "Weiter") {
   actionButton("nextButton", label)
 }
@@ -47,6 +51,9 @@ mark_questionnaire_complete <- function() {
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' one_page_questionnaire <- list(
 #'   page_choose_one_option(
 #'     "test_page_radio",
@@ -58,7 +65,7 @@ mark_questionnaire_complete <- function() {
 #' if (interactive()) {
 #'   app(questionnaire = one_page_questionnaire)
 #' }
-#'
+#' }
 page_choose_one_option <- function(page_id,
                                    question_text = "Please pick one of the following options",
                                    list_of_choices = list(One = 1, Two = 2, Three = 3),
@@ -169,11 +176,15 @@ page_choose_one_option <- function(page_id,
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' page_freetext(
 #'   "test_page_freetext",
 #'   question_text = "Hello there! Please fill in your name below:",
 #'   no_answer_checkbox = TRUE
 #' )
+#' }
 page_freetext <- function(page_id,
                           question_text = "Please enter your answer in the box below",
                           is_interview = FALSE,

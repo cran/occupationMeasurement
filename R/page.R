@@ -64,6 +64,9 @@
 #' @return A new `page` object.
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' very_simple_page <- new_page(
 #'   page_id = "example",
 #'   render = function(session, run_before_output, input, output, ...) {
@@ -133,7 +136,7 @@
 #' if (interactive()) {
 #'   app(questionnaire = questionnaire_that_saves_two_items)
 #' }
-#'
+#' }
 new_page <- function(page_id, render, condition = NULL, run_before = NULL, render_before = NULL, render_after = NULL, run_after = NULL) {
   page <- list(
     # A unique string identifiying this page. Used to store data.
@@ -327,6 +330,9 @@ get_page_data <- function(session, page_id, key = NULL, default = NULL) {
 #' @export
 #' @seealso [get_item_data()]
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' # Set up a "fake" shiny session to store data
 #' session <- shiny::MockShinySession$new()
 #' session$userData <- list(
@@ -350,6 +356,7 @@ get_page_data <- function(session, page_id, key = NULL, default = NULL) {
 #'   response_id = 3,
 #'   response_text = "I'm doing great! (response_id = 3)"
 #' )
+#' }
 set_item_data <- function(session, page_id, item_id = NULL, question_text = NULL, response_text = NULL, response_id = NULL) {
   if (is.null(item_id)) {
     item_id <- "default"
@@ -405,6 +412,9 @@ set_item_data <- function(session, page_id, item_id = NULL, question_text = NULL
 #' @export
 #' @seealso [set_item_data()]
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' # Set up a "fake" shiny session to store data
 #' session <- shiny::MockShinySession$new()
 #' session$userData <- list(
@@ -427,6 +437,7 @@ set_item_data <- function(session, page_id, item_id = NULL, question_text = NULL
 #'   session = session,
 #'   page_id = "example_page"
 #' )
+#' }
 get_item_data <- function(session, page_id, item_id = NULL, key = c("all", "question_text", "response_text", "response_id"), default = NULL) {
   if (is.null(item_id)) {
     item_id <- "default"

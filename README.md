@@ -1,7 +1,9 @@
 # occupationMeasurement <img src="man/figures/logo.png" width="120" align="right" />
 
 <!-- badges: start -->
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05505/status.svg)](https://doi.org/10.21105/joss.05505)
 [![R-CMD-check](https://github.com/occupationMeasurement/occupationMeasurement/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/occupationMeasurement/occupationMeasurement/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/occupationMeasurement)](https://CRAN.R-project.org/package=occupationMeasurement)
 <!-- badges: end -->
 
 A toolbox to help you with all tasks around the coding and measurement of occupations.
@@ -16,6 +18,10 @@ Coding people's occupations into official classifications such as the [Internati
 
 For a detailed overview of the package refer to `vignette("occupationMeasurement")` or take a look at `browseVignettes("occupationMeasurement")` to see a list of vignettes describing the package. All vignettes are also available in the [online documentation](https://occupationmeasurement.github.io/occupationMeasurement/index.html).
 
+Please cite our publication when using the software:
+
+Jan Simson, Olga Kononykhina, and Malte Schierholz (2023). occupationMeasurement: A Comprehensive Toolbox for Interactive Occupation Coding in Surveys. Journal of Open Source Software, 8(88), 5505, https://doi.org/10.21105/joss.05505
+
 <img src="man/figures/app_flow_screenshots.png" width="50%" align="right" alt="Screenshots illustrating the flow within the interactive application."/>
 
 ## Installation
@@ -23,7 +29,14 @@ For a detailed overview of the package refer to `vignette("occupationMeasurement
 Prerequisites:
 
 - The [R Statistical Software](https://www.r-project.org/) (Version 4.1 or higher)
-- The R package [remotes](https://remotes.r-lib.org/) to install packages from github, available via `install.packages("remotes")`
+
+The package can be installed directly from CRAN by running the code below:
+
+```r
+install.packages("occupationMeasurement")
+```
+
+To install the latest development version from GitHub, run you will need the R package [remotes](https://remotes.r-lib.org/) available via `install.packages("remotes")`.
 
 The package can then be installed by running the code below:
 
@@ -67,9 +80,39 @@ Besides the interactive app, there are also two alternative ways of using this p
 
 You can find more information on how to use these functionalities in `vignette("occupationMeasurement")`.
 
+## Getting Help & Contributing
+
+If you encounter any issues / bugs in the package, feel free to file an [issue on GitHub](https://github.com/occupationMeasurement/occupationMeasurement/issues), ideally alongside a clear reproducible example or description.
+
+We also welcome contributions to the package. If you want to contribute to the development of the package, we recommend to first open an [issue](https://github.com/occupationMeasurement/occupationMeasurement/issues) to discuss your ideas and plans, before working on a pull request.
+
+If you have any questions about the package or plan to use it in a project, feel free to reach out to one of the maintainers via email. The list of maintainers and their email addresses is in the `DESCRIPTION` file.
+
 ## Package Development
 
-This section is only relevant when further developing the package itself.
+This section is only relevant when further developing the package itself. 
+
+By default the package will only install dependencies it absolutely needs to run. For developing the package or running tests, the following packages can be installed via the snippet below.
+
+```r
+# Install development dependencies
+install.packages(c(
+  "devtools",
+  "testthat",
+  "shinytest2",
+  "httr",
+  "withr",
+  "callr",
+  "usethis",
+  "mvtnorm",
+  "readxl",
+  "styler",
+  "knitr",
+  "rmarkdown",
+  "DiagrammeR",
+  "sessioninfo"
+))
+```
 
 ### Testing
 

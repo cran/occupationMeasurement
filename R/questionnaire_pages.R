@@ -9,9 +9,13 @@
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' my_questionnaire <- list(page_welcome)
 #' if (interactive()) {
 #'   app(questionnaire = my_questionnaire)
+#' }
 #' }
 page_welcome <- function(title = "Herzlich Willkommen zum Modul zur automatischen Berufskodierung!",
                          ...) {
@@ -45,6 +49,9 @@ page_welcome <- function(title = "Herzlich Willkommen zum Modul zur automatische
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' my_questionnaire <- list(
 #'   page_first_freetext(),
 #'   page_second_freetext(),
@@ -55,6 +62,7 @@ page_welcome <- function(title = "Herzlich Willkommen zum Modul zur automatische
 #' )
 #' if (interactive()) {
 #'   app(questionnaire = my_questionnaire)
+#' }
 #' }
 page_first_freetext <- function(
     is_interview = FALSE,
@@ -124,6 +132,9 @@ page_first_freetext <- function(
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' my_questionnaire <- list(
 #'   page_first_freetext(),
 #'   page_second_freetext(),
@@ -134,6 +145,7 @@ page_first_freetext <- function(
 #' )
 #' if (interactive()) {
 #'   app(questionnaire = my_questionnaire)
+#' }
 #' }
 page_second_freetext <- function(
     combine_input_with_first = TRUE,
@@ -207,6 +219,9 @@ page_second_freetext <- function(
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' my_questionnaire <- list(
 #'   page_first_freetext(),
 #'   page_second_freetext(),
@@ -217,6 +232,7 @@ page_second_freetext <- function(
 #' )
 #' if (interactive()) {
 #'   app(questionnaire = my_questionnaire)
+#' }
 #' }
 page_select_suggestion <- function(is_interview = FALSE, ...) {
   new_page(
@@ -456,6 +472,9 @@ page_select_suggestion <- function(is_interview = FALSE, ...) {
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' my_questionnaire <- list(
 #'   page_first_freetext(),
 #'   page_second_freetext(),
@@ -466,6 +485,7 @@ page_select_suggestion <- function(is_interview = FALSE, ...) {
 #' )
 #' if (interactive()) {
 #'   app(questionnaire = my_questionnaire)
+#' }
 #' }
 page_none_selected_freetext <- function(is_interview = FALSE, ...) {
   page_freetext(
@@ -518,6 +538,9 @@ page_none_selected_freetext <- function(is_interview = FALSE, ...) {
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' my_questionnaire <- list(
 #'   page_first_freetext(),
 #'   page_second_freetext(),
@@ -528,6 +551,7 @@ page_none_selected_freetext <- function(is_interview = FALSE, ...) {
 #' )
 #' if (interactive()) {
 #'   app(questionnaire = my_questionnaire)
+#' }
 #' }
 page_followup <- function(index, is_interview = FALSE, ...) { # 1 based because R (sigh)
   new_page(
@@ -650,6 +674,9 @@ page_followup <- function(index, is_interview = FALSE, ...) { # 1 based because 
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' my_questionnaire <- list(
 #'   page_first_freetext(),
 #'   page_second_freetext(),
@@ -661,6 +688,7 @@ page_followup <- function(index, is_interview = FALSE, ...) { # 1 based because 
 #' )
 #' if (interactive()) {
 #'   app(questionnaire = my_questionnaire)
+#' }
 #' }
 page_results <- function(...) {
   new_page(
@@ -744,7 +772,12 @@ page_results <- function(...) {
     },
     render = function(session, page, run_before_output, ...) {
       res <- run_before_output$res
-      kldb_10 <- get_data("kldb-2010")
+      kldb_10 <- tryCatch({
+        get_data("kldb-2010")
+      }, error = function(e) {
+        warning("Could not load KldB 2010 data.")
+        return(NULL)
+      })
 
       list(
         h2("Ergebnis\u00fcberblick"),
@@ -776,10 +809,14 @@ page_results <- function(...) {
                 "Bitte w\u00e4hlen Sie eine Antwort auf der vorherigen Seite"
               )
             )
-            tabKldb <- data.frame(
-              Kategorie = c("Kldb Code", "Kldb Titel", "Kldb Inhalt"),
-              Ergebnis = c(res$kldb, kldb_10$title[res$kldb == kldb_10$kldb_id], kldb_10$description[res$kldb == kldb_10$kldb_id])
-            )
+            if (!is.null(kldb_10)) {
+              tabKldb <- data.frame(
+                Kategorie = c("Kldb Code", "Kldb Titel", "Kldb Inhalt"),
+                Ergebnis = c(res$kldb, kldb_10$title[res$kldb == kldb_10$kldb_id], kldb_10$description[res$kldb == kldb_10$kldb_id])
+              )
+            } else {
+              tabKldb <- data.frame(error = "Could not load KldB 2010 data.")
+            }
             tabKldb
           },
           striped = TRUE,
@@ -831,6 +868,9 @@ page_results <- function(...) {
 #' @return A page object.
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' my_questionnaire <- list(
 #'   page_first_freetext(),
 #'   page_select_suggestion(),
@@ -838,6 +878,7 @@ page_results <- function(...) {
 #' )
 #' if (interactive()) {
 #'   app(questionnaire = my_questionnaire)
+#' }
 #' }
 page_feedback <- function(is_interview = FALSE, ...) {
   # Column names used in data.table (for R CMD CHECK)
@@ -912,11 +953,15 @@ page_feedback <- function(is_interview = FALSE, ...) {
 #' @seealso [new_page()]
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' my_questionnaire <- list(
 #'   page_final()
 #' )
 #' if (interactive()) {
 #'   app(questionnaire = my_questionnaire)
+#' }
 #' }
 page_final <- function(...) {
   new_page(

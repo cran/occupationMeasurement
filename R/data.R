@@ -46,7 +46,7 @@
 #' [train_similarity_based_reasoning()] is then used to train the ML models. See data-raw/pretrained_models.R for the raw counts and further details.
 "pretrained_models"
 
-#' German Auxiliary Classification of Occupations (AuxCO)
+#' German Auxiliary Classification of Occupations (AuxCO) v1.2.3
 #'
 #' Berufs-Hilfsklassifikation mit Tätigkeitsbeschreibungen.
 #' @seealso
@@ -78,12 +78,16 @@
 #' @return A list with multiple data.tables.
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' # This function expects the CSV files from
 #' # https://github.com/occupationMeasurement/auxiliary-classification/releases/
 #' # to be there.
 #' path_to_auxco <- "auxco"
 #' if (dir.exists(path_to_auxco)) {
 #'   load_auxco(path_to_auxco)
+#' }
 #' }
 #' @seealso https://github.com/occupationMeasurement/auxiliary-classification, [auxco]
 load_auxco <- function(dir, add_explanations = TRUE) {
@@ -195,23 +199,31 @@ load_kldb_raw <- function(cache_dir = getOption("occupationMeasurement.cache_dir
 
     # Download the kldb file (which is a zip archive)
     url <- "https://www.klassifikationsserver.de/klassService/jsp/variant/downloadexport?type=EXPORT_CSV_VARIANT&variant=kldb2010&language=DE"
-    utils::download.file(url, destfile = kldb_archive_path, mode = "wb")
+    tryCatch({
+      utils::download.file(url, destfile = kldb_archive_path, mode = "wb")
+    }, error = function(e) {
+      stop("Could not download the KldB 2010 dataset. Please try again later.")
+    })
   }
 
   # Get the CSV filename
   # (R cannot extract the file directly due to special characters in the name)
-  filename_in_zip <- utils::unzip(zipfile = kldb_archive_path, list = TRUE)[1, "Name"]
+  kldb_df <- tryCatch({
+    filename_in_zip <- utils::unzip(zipfile = kldb_archive_path, list = TRUE)[1, "Name"]
 
-  # Unzip the file in-place and read its' contents
-  # (fread does not support reading from this kind of stream)
-  kldb_df <- utils::read.csv2(
-    unz(kldb_archive_path, filename_in_zip),
-    skip = 8,
-    sep = ";",
-    encoding = "UTF-8",
-    check.names = FALSE,
-    colClasses = c("character", rep(NA, 11))
-  )
+    # Unzip the file in-place and read its' contents
+    # (fread does not support reading from this kind of stream)
+    utils::read.csv2(
+      unz(kldb_archive_path, filename_in_zip),
+      skip = 8,
+      sep = ";",
+      encoding = "UTF-8",
+      check.names = FALSE,
+      colClasses = c("character", rep(NA, 11))
+    )
+  }, error = function(e) {
+    stop("Could not extract the KldB 2010 dataset. This could be related to an issue when downloading the archive.")
+  })
 
   return(as.data.table(kldb_df))
 }
@@ -230,6 +242,9 @@ load_kldb_raw <- function(cache_dir = getOption("occupationMeasurement.cache_dir
 #' @return A cleaned / slimmed version of the KldB 2010.
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' # We recommend using a non-temporary directory for caching, so data is
 #' # downloaded only once and not time and time again
 #' cache_dir <- tempdir()
@@ -238,6 +253,7 @@ load_kldb_raw <- function(cache_dir = getOption("occupationMeasurement.cache_dir
 #' load_kldb(cache_dir = cache_dir)
 #' # Load the raw dataset
 #' load_kldb_raw(cache_dir = cache_dir)
+#' }
 load_kldb <- function(cache_dir = getOption("occupationMeasurement.cache_dir", tempdir())) {
   # Column names used in data.table (for R CMD CHECK)
   level <- title <- label <- kldb_id <- NULL

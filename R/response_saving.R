@@ -308,9 +308,13 @@ save_results_overview <- function(session) {
 #'   NULL if there are no files.
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' app_settings <- create_app_settings(save_to_file = TRUE)
 #' if (interactive()) {
 #'   get_responses(app_settings = app_settings)
+#' }
 #' }
 get_responses <- function(app_settings = create_app_settings(save_to_file = TRUE)) {
   # Note: This has to match with the pattern of filenames specified in save_data_on_disk

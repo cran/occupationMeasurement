@@ -4,6 +4,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+data.table::setDTthreads(1)
+
 ## ----eval=FALSE---------------------------------------------------------------
 #  # Start the API (and open its documentation)
 #  occupationMeasurement::api()

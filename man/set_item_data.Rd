@@ -40,6 +40,9 @@ saved in \code{run_before} and the reply (\code{response_text} and/or \code{resp
 typically saved in \code{run_after}.
 }
 \examples{
+\dontshow{data.table::setDTthreads(1)}
+
+\dontrun{
 # Set up a "fake" shiny session to store data
 session <- shiny::MockShinySession$new()
 session$userData <- list(
@@ -63,6 +66,7 @@ set_item_data(
   response_id = 3,
   response_text = "I'm doing great! (response_id = 3)"
 )
+}
 }
 \seealso{
 \code{\link[=get_item_data]{get_item_data()}}

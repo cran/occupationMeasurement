@@ -4,6 +4,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+data.table::setDTthreads(1)
+
 ## ----eval=FALSE---------------------------------------------------------------
 #  library(occupationMeasurement)
 #  library(shiny)
@@ -12,11 +14,11 @@ knitr::opts_chunk$set(
 #    new_page(
 #      page_id = "test",
 #      render = function(...) {
-#        return(
+#        return(list(
 #          p("Hello!"),
 #          button_previous(),
 #          button_next()
-#        )
+#        ))
 #      }
 #    ),
 #  

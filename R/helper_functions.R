@@ -4,7 +4,7 @@
 #' (e.g., Ä, Ü, "DIPL.-ING.") with their uppercase equivalents and removes
 #' punctuation, empty spaces and the word "Diplom".
 #'
-#' [charToRaw()] or [stringi::stri_escape_unicode()] helps to find UTF-8 characters.
+#' [charToRaw()] helps to find UTF-8 characters.
 #' @encoding UTF-8
 #' @param verbatim The character vector to process.
 #' @param lang The language the text is in.
@@ -13,12 +13,16 @@
 #' @return The same character vector after processing
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' \dontrun{
 #' preprocess_string(c(
 #'   "Verkauf von B\u00fcchern, Schreibwaren",
 #'   "Fach\u00e4rztin f\u00fcr Kinder- und Jugendmedizin im \u00f6ffentlichen Gesundheitswesen",
 #'   "Industriemechaniker",
 #'   "Dipl.-Ing. - Agrarwirtschaft (Landwirtschaft)"
 #' ))
+#' }
 preprocess_string <- function(verbatim, lang = "de") {
   if (!is.character(verbatim)) {
     stop("Character Input required for function stringPreprocessing")

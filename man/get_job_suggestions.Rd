@@ -108,7 +108,15 @@ The procedure implemented here is, roughly speaking, as follows:
 }
 }
 \examples{
-get_job_suggestions("Koch")
+\dontshow{data.table::setDTthreads(1)}
 
-get_job_suggestions("Schlosser")
+\dontrun{
+if (interactive()) {
+  get_job_suggestions("Koch")
+}
+
+if (interactive()) {
+  get_job_suggestions("Schlosser")
+}
+}
 }

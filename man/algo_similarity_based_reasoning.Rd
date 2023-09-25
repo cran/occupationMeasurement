@@ -38,28 +38,35 @@ Note: This function should not be used directly, but rather as a step /
 algorithm in get_job_suggestions.
 }
 \examples{
-# Use with default settings
-get_job_suggestions(
-  "Arzt",
-  steps = list(
-    simbased_default = list(
-      algorithm = algo_similarity_based_reasoning
-    )
-  )
-)
+\dontshow{data.table::setDTthreads(1)}
 
-# Use with substring similarity
-get_job_suggestions(
-  "Arzt",
-  steps = list(
-    simbased_substring = list(
-      algorithm = algo_similarity_based_reasoning,
-      parameters = list(
-        sim_name = "substring"
+\dontrun{
+# Use with default settings
+if (interactive()) {
+  get_job_suggestions(
+    "Arzt",
+    steps = list(
+      simbased_default = list(
+        algorithm = algo_similarity_based_reasoning
       )
     )
   )
-)
+}
+
+# Use with substring similarity
+if (interactive()) {
+ get_job_suggestions(
+   "Arzt",
+   steps = list(
+     simbased_substring = list(
+       algorithm = algo_similarity_based_reasoning,
+       parameters = list(
+         sim_name = "substring"
+       )
+     )
+   )
+ )
+}
 
 # Comparison of algo_similarity_based_reasoning() with get_job_suggestions()
 
@@ -86,6 +93,7 @@ if (interactive()) {
       )
     )
   )[, list(kldb_id, score, sim_name, kldb_id_title = title)]
+}
 }
 }
 \references{

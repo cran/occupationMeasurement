@@ -23,13 +23,17 @@ Replace some common characters / character sequences
 punctuation, empty spaces and the word "Diplom".
 }
 \details{
-\code{\link[=charToRaw]{charToRaw()}} or \code{\link[stringi:stri_escape_unicode]{stringi::stri_escape_unicode()}} helps to find UTF-8 characters.
+\code{\link[=charToRaw]{charToRaw()}} helps to find UTF-8 characters.
 }
 \examples{
+\dontshow{data.table::setDTthreads(1)}
+
+\dontrun{
 preprocess_string(c(
   "Verkauf von B\u00fcchern, Schreibwaren",
   "Fach\u00e4rztin f\u00fcr Kinder- und Jugendmedizin im \u00f6ffentlichen Gesundheitswesen",
   "Industriemechaniker",
   "Dipl.-Ing. - Agrarwirtschaft (Landwirtschaft)"
 ))
+}
 }

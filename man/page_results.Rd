@@ -18,6 +18,9 @@ entered and which code was being saved. The page is only included in the
 \code{\link[=questionnaire_demo]{questionnaire_demo()}}, but not in the other questionnaire templates.
 }
 \examples{
+\dontshow{data.table::setDTthreads(1)}
+
+\dontrun{
 my_questionnaire <- list(
   page_first_freetext(),
   page_second_freetext(),
@@ -29,6 +32,7 @@ my_questionnaire <- list(
 )
 if (interactive()) {
   app(questionnaire = my_questionnaire)
+}
 }
 }
 \seealso{
