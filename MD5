@@ -1,7 +1,7 @@
-c962749bca885ba5be1983c492e23ab8 *DESCRIPTION
+c53ae28b8239443b73fe340cf6257416 *DESCRIPTION
 bcf85844981cf71df870077ec280dd23 *LICENSE
 a864da761f115ffddda445b059ad53f6 *NAMESPACE
-a4026a4d8f5a3ae96fd8177a14d63d55 *NEWS.md
+7934476a3b45246a0890f1c7a3402528 *NEWS.md
 6abe76efcca0e45ac15cc7ebcf1365ad *R/api.R
 62731f6a7888252c795d83eac527002e *R/app.R
 176e242a9da6655d366397a11c435382 *R/app_settings.R
@@ -96,7 +96,7 @@ eabe6e6e60793e078e61dea49f524a0b *man/set_item_data.Rd
 d544d8a8be557973aa018734c4feeb06 *tests/testthat/cache/kldb_2010_archive.zip
 ea1665286a343e9a47703cd682169cc2 *tests/testthat/helper.R
 71ca00cb2c34aee306e87a84d7aa4d79 *tests/testthat/setup.R
-ec30f563457e67d91225312fe03f2c88 *tests/testthat/test-api.R
+dfdf80bac155a92b303b934ec827c67f *tests/testthat/test-api.R
 621fbb8d3f3acd1bf2e6b26f6bf6cea5 *tests/testthat/test-app.R
 3f4f0ecc1bbdd2b9561a77c0c0ad872d *tests/testthat/test-data-transformation.R
 8c65f3d3175108818f7deb100220e138 *tests/testthat/test-helper-functions.R
